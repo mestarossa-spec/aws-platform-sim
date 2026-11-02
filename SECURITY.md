@@ -14,4 +14,5 @@ Checkov findings deliberately not fixed. Each would be revisited for production.
 | CKV_AWS_18 | No S3 access logging on state bucket | Needs a separate log bucket with a specific policy | Central log bucket with lifecycle rules |
 | CKV_AWS_91 | No ALB access logs | Needs S3 bucket with ALB-specific bucket policy | Central log bucket |
 | CKV_AWS_394 | aws_availability_zones not pinned | Minor; would require filter blocks for AZ names | Pin AZ names explicitly |
-| CKV_AWS_28 | DynamoDB PITR off on lock table | Low-value fix: lock table holds no recoverable data, only advisory locks | Enabled if state operations are complex |
+| CKV_AWS_28 | DynamoDB PITR off on lock table | Low-value fix: lock table holds only advisory locks, not data worth recovering | Enable if the table ever holds anything else |
+| CKV_AWS_394 | aws_availability_zones data source not pinned | Minor risk; adding a `filter` block pins AZ names but silently breaks if the filtered AZ is removed | Pin AZ names explicitly in production |
