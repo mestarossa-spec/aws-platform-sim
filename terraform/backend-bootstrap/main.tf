@@ -18,9 +18,9 @@ resource "aws_s3_bucket" "tfstate" {
   bucket = var.state_bucket_name
 
   tags = {
-    Project     = "aws-platform-sim"
-    ManagedBy   = "terraform"
-    Purpose     = "terraform-state"
+    Project   = "aws-platform-sim"
+    ManagedBy = "terraform"
+    Purpose   = "terraform-state"
   }
 }
 
