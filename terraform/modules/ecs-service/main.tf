@@ -50,6 +50,7 @@ resource "aws_security_group" "alb" {
   vpc_id      = var.vpc_id
 
   ingress {
+    description = "HTTP from internet"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -57,6 +58,7 @@ resource "aws_security_group" "alb" {
   }
 
   egress {
+    description = "Outbound to tasks"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -72,6 +74,7 @@ resource "aws_security_group" "task" {
   vpc_id      = var.vpc_id
 
   ingress {
+    description     = "HTTP from ALB only"
     from_port       = var.container_port
     to_port         = var.container_port
     protocol        = "tcp"
@@ -79,6 +82,7 @@ resource "aws_security_group" "task" {
   }
 
   egress {
+    description = "Outbound for image pulls and AWS APIs"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -90,11 +94,12 @@ resource "aws_security_group" "task" {
 
 # Load balancer
 resource "aws_lb" "this" {
-  name               = "${var.name}-alb"
-  load_balancer_type = "application"
-  subnets            = var.public_subnet_ids
-  security_groups    = [aws_security_group.alb.id]
-  tags               = var.tags
+  name                       = "${var.name}-alb"
+  load_balancer_type         = "application"
+  subnets                    = var.public_subnet_ids
+  security_groups            = [aws_security_group.alb.id]
+  drop_invalid_header_fields = true
+  tags                       = var.tags
 }
 
 resource "aws_lb_target_group" "this" {

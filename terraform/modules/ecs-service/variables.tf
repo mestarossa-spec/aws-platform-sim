@@ -43,7 +43,7 @@ variable "memory" {
 
 variable "log_retention_days" {
   type    = number
-  default = 7
+  default = 365
 }
 
 variable "tags" {
