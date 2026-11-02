@@ -61,3 +61,19 @@ output "private_subnet_ids" {
 output "alb_dns_name" {
   value = module.ecs_service.alb_dns_name
 }
+
+variable "alert_email" {
+  type        = string
+  description = "Email for SNS alarm notifications (set via TF_VAR_alert_email)"
+}
+
+module "alarms" {
+  source                  = "../../modules/alarms"
+  name                    = "platform-sim-dev"
+  alert_email             = var.alert_email
+  alb_arn_suffix          = module.ecs_service.alb_arn_suffix
+  target_group_arn_suffix = module.ecs_service.target_group_arn_suffix
+  cluster_name            = module.ecs_service.cluster_name
+  service_name            = module.ecs_service.service_name
+  tags                    = local.tags
+}
