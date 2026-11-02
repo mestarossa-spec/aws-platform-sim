@@ -15,7 +15,7 @@ output "lock_table_name" {
 
 output "backend_config" {
   description = "Paste this into other modules' backend block"
-  value = <<-EOT
+  value       = <<-EOT
     backend "s3" {
       bucket         = "${aws_s3_bucket.tfstate.bucket}"
       key            = "<module>/terraform.tfstate"
