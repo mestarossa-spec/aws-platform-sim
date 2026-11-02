@@ -11,6 +11,10 @@ variable "cidr_block" {
 variable "az_count" {
   type    = number
   default = 2
+  validation {
+    condition     = var.az_count >= 2
+    error_message = "az_count must be at least 2 (ALB requires subnets in 2+ AZs)."
+  }
 }
 
 variable "enable_nat_gateway" {

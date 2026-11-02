@@ -32,7 +32,17 @@ module "vpc" {
   source             = "../../modules/vpc"
   name               = "platform-sim-dev"
   az_count           = var.az_count
-  enable_nat_gateway = var.enable_nat_gateway
+  enable_nat_gateway = true
+  tags               = local.tags
+}
+
+module "ecs_service" {
+  source             = "../../modules/ecs-service"
+  name               = "platform-sim-dev"
+  vpc_id             = module.vpc.vpc_id
+  public_subnet_ids  = module.vpc.public_subnet_ids
+  private_subnet_ids = module.vpc.private_subnet_ids
+  container_image    = "public.ecr.aws/nginx/nginx:stable"
   tags               = local.tags
 }
 
@@ -46,4 +56,8 @@ output "public_subnet_ids" {
 
 output "private_subnet_ids" {
   value = module.vpc.private_subnet_ids
+}
+
+output "alb_dns_name" {
+  value = module.ecs_service.alb_dns_name
 }
